@@ -5,8 +5,8 @@ module Swimmy
       require "uri"
       require "open-uri"
 
-      def initialize()
-        @openhab_uri = ENV["OPENHAB_API_KEY"]
+      def initialize(openhab_url)
+        @openhab_uri = openhab_url
         @opinfo = JSON.parse(URI.open(@openhab_uri, &:read)) 
       end
 

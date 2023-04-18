@@ -2,11 +2,16 @@ module Swimmy
   module Command
     class Openhab < Swimmy::Command::Base
       command "openhab" do |client, data, match|
+        OPENHAB_URL = ENV["OPENHAB_API_URL"]
+        if OPENHAB_URL == nil
+          client.say(channel: data.channel, text: ".env に必要な項目がありません．")
+          return
+        end
         keyword = match[:expression]
         result_text = ""
         error_text = "データが存在しません．入力が間違っている可能性があります．\n" +
                      "\"swimmy help openhab\" と入力して使用可能なキーワードを確認してください．"
-        result_data = Swimmy::Service::Openhabinfo.new.fetch_info
+        result_data = Swimmy::Service::Openhabinfo.new(OPENHAB_URL).fetch_info
         result_data.each do |data|
           if data.get_value == keyword
             puts data.get_value
@@ -19,11 +24,15 @@ module Swimmy
         else 
           client.say(channel: data.channel, text: result_text)
         end
-      end
+      end 
 
       help do
-        openhab_uri = ENV["OPENHAB_API_KEY"]
-        helpinfo = Swimmy::Service::Openhabinfo.new.fetch_help
+        OPENHAB_URL = ENV["OPENHAB_API_URL"]
+        helpinfo = if OPENHAB_URL == nil
+            ".env に必要な項目がありません．追加して再起動してください．"
+          else
+            Swimmy::Service::Openhabinfo.new(OPENHAB_URL).fetch_help
+          end
         title "openhab"
         desc "キーワードに対応したOpenHAB上の情報を表示します"
         long_desc "表示したい情報を<keyword>として以下のように入力することで，対応した情報を表示します．\n" +
