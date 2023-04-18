@@ -6,7 +6,6 @@ module Swimmy
       require "open-uri"
 
       def initialize()
-        #@openhab_uri = openhab_uri
         @openhab_uri = ENV["OPENHAB_API_KEY"]
         @opinfo = JSON.parse(URI.open(@openhab_uri, &:read)) 
       end
@@ -14,19 +13,10 @@ module Swimmy
       def fetch_info
         info = {}
         retval = []
-        puts '+++++++++++++++++++++++'
-        puts @openhab_uri
-        puts '---------------------------'
         @opinfo.each do |openhab_data|
           next if openhab_data["metadata"] == nil
           retval.push(Swimmy::Resource::Openhabresource.new(openhab_data["metadata"]["swimmy"]["value"], openhab_data["state"]))
-          #if openhab_data["metadata"]["swimmy"]["value"] == keyword
-            #info = openhab_data["state"]
-          #info[:value] = openhab_data["metadata"]["swimmy"]["value"]
-          #info[:state] = openhab_data["state"]
-          #end
         end
-        #return info
         return retval
       end
 
@@ -44,7 +34,6 @@ module Swimmy
         return help
       end
 
-        #info[:result] = JSON.parse(URI.open(@openhab_uri, &:read))["state"]
 
     end # class Openhabinfo
   end # module Service
