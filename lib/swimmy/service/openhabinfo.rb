@@ -5,33 +5,29 @@ module Swimmy
       require "uri"
       require "open-uri"
 
-      def initialize(openhab_uri)
-        puts 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        @openhab_uri = openhab_uri
-        #@openhab_uri = ENV["OPENHAB_API_KEY"]
-        #@openhab_uri = "http://openhab.gc.cs.okayama-u.ac.jp/rest/items?metadata=swimmy"
+      def initialize()
+        #@openhab_uri = openhab_uri
+        @openhab_uri = ENV["OPENHAB_API_KEY"]
         @opinfo = JSON.parse(URI.open(@openhab_uri, &:read)) 
-        pp ENV["OPENHAB_API_KEY"]
-        puts 'ccccccccccccccccccccccccccccccccc'
-        puts @openhab_uri
-        puts 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
       end
 
-      def fetch_info(keyword)
+      def fetch_info
         info = {}
+        retval = []
         puts '+++++++++++++++++++++++'
         puts @openhab_uri
         puts '---------------------------'
         @opinfo.each do |openhab_data|
           next if openhab_data["metadata"] == nil
-          if openhab_data["metadata"]["swimmy"]["value"] == keyword
-            info = openhab_data["state"]
+          retval.push(Swimmy::Resource::Openhabresource.new(openhab_data["metadata"]["swimmy"]["value"], openhab_data["state"]))
+          #if openhab_data["metadata"]["swimmy"]["value"] == keyword
+            #info = openhab_data["state"]
           #info[:value] = openhab_data["metadata"]["swimmy"]["value"]
           #info[:state] = openhab_data["state"]
-          end
+          #end
         end
-        return info
-        #return Swimmy::Resource::Openhabresource.new(info)
+        #return info
+        return retval
       end
 
       def fetch_help
@@ -41,7 +37,8 @@ module Swimmy
           if openhab_data["metadata"]["swimmy"]
             help += openhab_data["metadata"]["swimmy"]["value"]
             help += "："
-            help += openhab_data["metadata"]["swimmy"]["config"]["description"]    
+            help += openhab_data["metadata"]["swimmy"]["config"]["description"]
+            help += "\n"    
           end
         end
         return help
