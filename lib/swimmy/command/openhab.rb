@@ -27,17 +27,17 @@ module Swimmy
 
       help do
         OPENHAB_URL = ENV["OPENHAB_API_URL"]
-        helpinfo = if OPENHAB_URL == nil
-            ".env に必要な項目がありません．追加して再起動してください．"
-          else
-            Swimmy::Service::Openhab.new(OPENHAB_URL, "swimmy").fetch_info
-          end
         help = ""
-        helpinfo.each do |openhab_data|
-          help += openhab_data.value
-          help += "："
-          help += openhab_data.config["description"]
-          help += "\n"
+        if OPENHAB_URL == nil
+          help = ".env に必要な項目がありません．追加して再起動してください．"
+        else
+          helpinfo = Swimmy::Service::Openhab.new(OPENHAB_URL, "swimmy").fetch_info
+          helpinfo.each do |openhab_data|
+            help += openhab_data.value
+            help += "："
+            help += openhab_data.config["description"]
+            help += "\n"
+          end
         end
 
         title "openhab"
