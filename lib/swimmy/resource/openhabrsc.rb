@@ -1,18 +1,13 @@
 module Swimmy
   module Resource
     class Openhabresource
+      attr_reader :name, :value, :state, :config
       
-      def initialize(value, state)
+      def initialize(metadataname, value, state, config)
+        @name = metadataname
         @value = value 
         @state = state
-      end
-
-      def get_value
-        return @value
-      end
-
-      def get_state
-        return @state
+        @config = config
       end
     end
   end

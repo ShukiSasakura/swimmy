@@ -11,11 +11,10 @@ module Swimmy
         result_text = ""
         error_text = "データが存在しません．入力が間違っている可能性があります．\n" +
                      "\"swimmy help openhab\" と入力して使用可能なキーワードを確認してください．"
-        result_data = Swimmy::Service::Openhabinfo.new(OPENHAB_URL).fetch_info
+        result_data = Swimmy::Service::Openhab.new(OPENHAB_URL, "swimmy").fetch_info
         result_data.each do |data|
-          if data.get_value == keyword
-            puts data.get_value
-            result_text += data.get_state
+          if data.value == keyword
+            result_text += data.state
             result_text += "\n"
           end
         end
@@ -31,15 +30,24 @@ module Swimmy
         helpinfo = if OPENHAB_URL == nil
             ".env に必要な項目がありません．追加して再起動してください．"
           else
-            Swimmy::Service::Openhabinfo.new(OPENHAB_URL).fetch_help
+            Swimmy::Service::Openhab.new(OPENHAB_URL, "swimmy").fetch_info
           end
+        help = ""
+        helpinfo.each do |openhab_data|
+          help += openhab_data.value
+          help += "："
+          help += openhab_data.config["description"]
+          help += "\n"
+        end
+
         title "openhab"
         desc "キーワードに対応したOpenHAB上の情報を表示します"
-        long_desc "表示したい情報を<keyword>として以下のように入力することで，対応した情報を表示します．\n" +
+        long_desc "表示したい情報を<keyword>として以下のように入力することで，
+                   対応した情報を表示します．\n" +
                   "openhab <keyword>\n" +
                   "使用可能なキーワードは以下のものです．\n" +
                   "<keyword> : <description> \n" +
-                  helpinfo 
+                  help 
       end
 
     end

@@ -10,5 +10,6 @@ module Swimmy
     autoload :RestaurantInfo, "#{dir}/restaurant_info.rb"
     autoload :CalendarService,    "#{dir}/calendar_service.rb"
     autoload :Openhabinfo, "#{dir}/openhabinfo.rb"
+    autoload :Openhab, "#{dir}/openhab.rb"
   end
 end
