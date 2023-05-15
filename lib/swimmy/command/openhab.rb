@@ -2,7 +2,7 @@ module Swimmy
   module Command
     class Openhab < Swimmy::Command::Base
       command "openhab" do |client, data, match|
-        OPENHAB_URL = ENV["OPENHAB_API_URL"]
+        OPENHAB_URL = ENV["OPENHAB_URL"]
         if OPENHAB_URL == nil
           client.say(channel: data.channel, text: ".env に必要な項目がありません．")
           return
@@ -26,7 +26,7 @@ module Swimmy
       end 
 
       help do
-        OPENHAB_URL = ENV["OPENHAB_API_URL"]
+        OPENHAB_URL = ENV["OPENHAB_URL"]
         help = ""
         if OPENHAB_URL == nil
           help = ".env に必要な項目がありません．追加して再起動してください．"
