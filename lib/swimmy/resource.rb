@@ -15,6 +15,6 @@ module Swimmy
     autoload :Restaurant,  "#{dir}/restaurant.rb"
     autoload :GoogleOAuth, "#{dir}/google_oauth.rb"
     autoload :Event,       "#{dir}/event.rb"
-    autoload :Openhabresource, "#{dir}/openhabrsc.rb"
+    autoload :OpenhabMetadata, "#{dir}/openhab_metadata.rb"
   end
 end
